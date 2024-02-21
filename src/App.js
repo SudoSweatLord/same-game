@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // grid
 const width = 20;
 const height = 10;
@@ -17,8 +17,10 @@ const App = () => {
     setGrid(grid);
     // console.log(grid);
   };
-
-  createGrid();
+useEffect(() => {
+    createGrid();
+  }, []);
+  // createGrid();
   console.log(grid)
 
   return (
