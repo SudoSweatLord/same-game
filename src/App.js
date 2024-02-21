@@ -17,15 +17,14 @@ const App = () => {
     setGrid(grid);
     // console.log(grid);
   };
-useEffect(() => {
+  useEffect(() => {
     createGrid();
   }, []);
   // createGrid();
-  console.log(grid)
 
   return (
-    <div>
-      <div>Grid</div>
+    <div className="app">
+      <div className="game"></div>
     </div>
   );
 };
