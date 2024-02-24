@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./index.css";
 // grid
 const width = 20;
 const height = 10;
@@ -24,7 +25,22 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="game"></div>
+      {grid.map((tile, index) => (
+        <div
+          key={index}
+          className="game"
+          style={
+            {
+              display: "flex",
+              flexWrap: "wrap",
+              width: "50px",
+              height: "50px",
+              // display: "inline-block",
+              backgroundColor: tile,
+            }
+          }
+        ></div>
+      ))}
     </div>
   );
 };
