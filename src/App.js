@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import "./index.css";
+import blueTile from "./tiles/blue.png";
+import greenTile from "./tiles/green.png";
+import orangeTile from "./tiles/orange.png";
+import  purpleTile from "./tiles/purple.png";
 
 // grid
 const width = 20;
 const height = 10;
 
-const tileColors = ["green", "blue", "purple", "orange"];
+const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
@@ -27,13 +31,12 @@ const App = () => {
   return (
     <div className="app">
       <div className="game">
-        {grid.map((tile, index) => (
+        {grid.map((tileColors, index) => (
           <img
             key={index}
+            src={tileColors}
             alt="tile"
-            style={{
-              backgroundColor: tile,
-            }}
+
           ></img>
         ))}
       </div>
