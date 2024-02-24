@@ -1,16 +1,17 @@
 .app {
   display: flex;
-  padding: 10px;
+  padding: 13px;
 }
 
 .game {
-  display: flex;  
+  display: flex;
   flex-wrap: wrap;
   width: 1000px;
   height: 500px;
-} 
+  border: 20px solid #000;
+}
 
 .game img {
   width: 50px;
   height: 50px;
-} 
+}
