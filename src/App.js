@@ -25,22 +25,19 @@ const App = () => {
 
   return (
     <div className="app">
+    <div className="game">
       {grid.map((tile, index) => (
-        <div
+        <img
           key={index}
-          className="game"
+          alt="tile"
           style={
             {
-              display: "flex",
-              flexWrap: "wrap",
-              width: "50px",
-              height: "50px",
-              // display: "inline-block",
               backgroundColor: tile,
             }
           }
-        ></div>
+        ></img>
       ))}
+    </div>
     </div>
   );
 };
