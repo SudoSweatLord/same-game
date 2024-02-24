@@ -1,16 +1,17 @@
 .app {
   display: flex;
+  /* padding: 300px; */
 }
-.game {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 2000px;
-  height: 1000px;
+/* .game {
+  display: flex;  
+  flex-wrap: wrap;
+  width: 1000px;
+  height: 500px;
 }
 
-.game image {
-  width: 10px;
-  height: 10px;
-}
+.game img {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  background-color: tile;
+} */
