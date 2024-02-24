@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./index.css";
+
 // grid
 const width = 20;
 const height = 10;
@@ -25,19 +26,17 @@ const App = () => {
 
   return (
     <div className="app">
-    <div className="game">
-      {grid.map((tile, index) => (
-        <img
-          key={index}
-          alt="tile"
-          style={
-            {
+      <div className="game">
+        {grid.map((tile, index) => (
+          <img
+            key={index}
+            alt="tile"
+            style={{
               backgroundColor: tile,
-            }
-          }
-        ></img>
-      ))}
-    </div>
+            }}
+          ></img>
+        ))}
+      </div>
     </div>
   );
 };
