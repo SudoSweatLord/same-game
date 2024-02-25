@@ -37,6 +37,14 @@ const App = () => {
   }
   const moveTilesDown = () => {
     for (let i = 0; i < width * (height - 1); i++) {
+      const firstRow = [...Array(width).keys()].map((n) => n + i);
+      const isFirstRow = firstRow.includes(i);
+
+      if (isFirstRow && grid[i] === "") {
+        let randomTile = Math.floor(Math.random() * tileColors.length);
+        grid[i] = tileColors[randomTile];
+      }
+
       if (grid[i + width] === "") {
         grid[i + width] = grid[i];
         grid[i] = "";
@@ -67,7 +75,7 @@ const App = () => {
         setGrid([...grid]);
       },
       [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid],
-      500
+      10000
     );
     return () => clearInterval(interval);
   }, [checkForVerticalThree,checkForHorizontalThree, moveTilesDown, grid]);
