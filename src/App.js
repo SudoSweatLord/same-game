@@ -43,8 +43,8 @@ const App = () => {
       grid.push(randomTile);
     }
     setGrid(grid);
-    // console.log(grid);
   };
+
   useEffect(() => {
     createGrid();
   }, []);
@@ -58,11 +58,11 @@ const App = () => {
         setGrid([...grid]);
       },
       [checkForVerticalThree, checkForHorizontalThree, grid],
-      5000
+      500
     );
     return () => clearInterval(interval);
   }, [checkForVerticalThree,checkForHorizontalThree, grid]);
-console.log(grid);
+
   return (
     <div className="app">
       <div className="game">
