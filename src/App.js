@@ -53,9 +53,10 @@ const App = () => {
   return (
     <div className="app">
       <div className="game">
-        {grid.map((tileColors, index) => (
-          <img key={index} src={tileColors} alt="tile"></img>
-        ))}
+        {grid.map((tileColor, index) => {
+          const colorName = tileColor.split("/").pop().split(".")[0];
+          return <img key={index} src={tileColor} alt={colorName}></img>;
+        })}
       </div>
     </div>
   );
