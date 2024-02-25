@@ -3,7 +3,7 @@ import "./index.css";
 import blueTile from "./tiles/blue.png";
 import greenTile from "./tiles/green.png";
 import orangeTile from "./tiles/orange.png";
-import  purpleTile from "./tiles/purple.png";
+import purpleTile from "./tiles/purple.png";
 
 // grid
 const width = 20;
@@ -16,14 +16,13 @@ const App = () => {
 
   const checkForVerticalThree = () => {
     for (let i = 0; i < width * (height - 2); i++) {
-   const verticalThree = [i, i + width, i + width * 2];
-   const checkColor = grid[i];
-   if ( verticalThree.every(number => grid[number] === checkColor) ) {
-    verticalThree.forEach(number => grid[number] = "");
-   }
-   
+      const verticalThree = [i, i + width, i + width * 2];
+      const checkColor = grid[i];
+      if (verticalThree.every((number) => grid[number] === checkColor)) {
+        verticalThree.forEach((number) => (grid[number] = ""));
+      }
     }
-  }
+  };
 
   const createGrid = () => {
     const grid = [];
@@ -38,21 +37,24 @@ const App = () => {
   useEffect(() => {
     createGrid();
   }, []);
-  
+
   useEffect(() => {
-    checkForVerticalThree();
-  }, [grid]);
+    const interval = setInterval(
+      () => {
+        checkForVerticalThree();
+        setGrid([...grid]);
+      },
+      [checkForVerticalThree],
+      1000
+    );
+    return () => clearInterval(interval);
+  }, [checkForVerticalThree, grid]);
 
   return (
     <div className="app">
       <div className="game">
         {grid.map((tileColors, index) => (
-          <img
-            key={index}
-            src={tileColors}
-            alt="tile"
-
-          ></img>
+          <img key={index} src={tileColors} alt="tile"></img>
         ))}
       </div>
     </div>
