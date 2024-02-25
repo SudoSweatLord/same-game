@@ -31,8 +31,6 @@ const App = () => {
         if (horizontalThree.every((number) => grid[number] === checkColor)) {
           horizontalThree.forEach((number) => (grid[number] = ""));
         }
-
-
     }
   }
   const moveTilesDown = () => {
@@ -73,13 +71,12 @@ const App = () => {
         checkForHorizontalThree();
         moveTilesDown();
         setGrid([...grid]);
-      },
-      [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid],
-      10000
-    );
-    return () => clearInterval(interval);
-  }, [checkForVerticalThree,checkForHorizontalThree, moveTilesDown, grid]);
+      }, 1000)
+      return () => clearInterval(interval)
+    },
+      [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]
 
+  );
   return (
     <div className="app">
       <div className="game">
