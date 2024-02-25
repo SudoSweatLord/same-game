@@ -35,6 +35,14 @@ const App = () => {
 
     }
   }
+  const moveTilesDown = () => {
+    for (let i = 0; i < width * (height - 1); i++) {
+      if (grid[i + width] === "") {
+        grid[i + width] = grid[i];
+        grid[i] = "";
+      }
+    }
+  }
   const createGrid = () => {
     const grid = [];
     for (let i = 0; i < width * height; i++) {
@@ -55,13 +63,14 @@ const App = () => {
         // check for 4 would be here so it gets executed prior to the 3
         checkForVerticalThree();
         checkForHorizontalThree();
+        moveTilesDown();
         setGrid([...grid]);
       },
-      [checkForVerticalThree, checkForHorizontalThree, grid],
+      [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid],
       500
     );
     return () => clearInterval(interval);
-  }, [checkForVerticalThree,checkForHorizontalThree, grid]);
+  }, [checkForVerticalThree,checkForHorizontalThree, moveTilesDown, grid]);
 
   return (
     <div className="app">
