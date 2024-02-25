@@ -24,6 +24,17 @@ const App = () => {
     }
   };
 
+  const checkForHorizontalThree = () => {
+    for (let i = 0; i < (width -2) * height; i++) {
+        const horizontalThree = [i, i + 1, i + 2];
+        const checkColor = grid[i];
+        if (horizontalThree.every((number) => grid[number] === checkColor)) {
+          horizontalThree.forEach((number) => (grid[number] = ""));
+        }
+
+
+    }
+  }
   const createGrid = () => {
     const grid = [];
     for (let i = 0; i < width * height; i++) {
@@ -41,15 +52,17 @@ const App = () => {
   useEffect(() => {
     const interval = setInterval(
       () => {
+        // check for 4 would be here so it gets executed prior to the 3
         checkForVerticalThree();
+        checkForHorizontalThree();
         setGrid([...grid]);
       },
-      [checkForVerticalThree],
-      1000
+      [checkForVerticalThree, checkForHorizontalThree, grid],
+      5000
     );
     return () => clearInterval(interval);
-  }, [checkForVerticalThree, grid]);
-
+  }, [checkForVerticalThree,checkForHorizontalThree, grid]);
+console.log(grid);
   return (
     <div className="app">
       <div className="game">
