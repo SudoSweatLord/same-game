@@ -18,21 +18,27 @@ const App = () => {
     for (let i = 0; i < width * (height - 2); i++) {
       const verticalThree = [i, i + width, i + width * 2];
       const checkColor = grid[i];
-      if (verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)) {
+      if (
+        verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)
+      ) {
         verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
       }
     }
   };
 
   const checkForHorizontalThree = () => {
-    for (let i = 0; i < (width -2) * height; i++) {
-        const horizontalThree = [i, i + 1, i + 2];
-        const checkColor = grid[i];
-        if (horizontalThree.every((tilePosition) => grid[tilePosition] === checkColor)) {
-          horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-        }
+    for (let i = 0; i < (width - 2) * height; i++) {
+      const horizontalThree = [i, i + 1, i + 2];
+      const checkColor = grid[i];
+      if (
+        horizontalThree.every(
+          (tilePosition) => grid[tilePosition] === checkColor
+        )
+      ) {
+        horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
+      }
     }
-  }
+  };
   const moveTilesDown = () => {
     for (let i = 0; i < width * (height - 1); i++) {
       const firstRow = [...Array(width).keys()].map((n) => n + i);
@@ -48,7 +54,18 @@ const App = () => {
         grid[i] = "";
       }
     }
+  };
+
+  const dragStart = (e) => {
+    console.log("drag start");
   }
+  const dragDrop = (e) => {
+    console.log("drag drop");
+  }
+  const dragEnd = (e) => {
+    console.log("drag end");
+  }
+
   const createGrid = () => {
     const grid = [];
     for (let i = 0; i < width * height; i++) {
@@ -64,25 +81,21 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        // check for 4 would be here so it gets executed prior to the 3
-        checkForVerticalThree();
-        checkForHorizontalThree();
-        moveTilesDown();
-        setGrid([...grid]);
-      }, 1000)
-      return () => clearInterval(interval)
-    },
-      [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]
-
-  );
+    const interval = setInterval(() => {
+      // check for 4 would be here so it gets executed prior to the 3
+      checkForVerticalThree();
+      checkForHorizontalThree();
+      moveTilesDown();
+      setGrid([...grid]);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]);
   return (
     <div className="app">
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
-          return <img key={index} src={tileColor} alt={colorName}></img>;
+          return <img key={index} src={tileColor} alt={colorName} data-id={index} draggable={true} onDragStart={dragStart} onDragOver={(e) => e.preventDefault()} onDragEnter={(e) => e.preventDefault()} onDragLeave={(e) => e.preventDefault()} onDrop={dragDrop} onDragEnd={dragEnd}></img>;
         })}
       </div>
     </div>
