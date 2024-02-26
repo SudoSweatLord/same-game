@@ -18,8 +18,8 @@ const App = () => {
     for (let i = 0; i < width * (height - 2); i++) {
       const verticalThree = [i, i + width, i + width * 2];
       const checkColor = grid[i];
-      if (verticalThree.every((number) => grid[number] === checkColor)) {
-        verticalThree.forEach((number) => (grid[number] = ""));
+      if (verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)) {
+        verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
       }
     }
   };
@@ -28,8 +28,8 @@ const App = () => {
     for (let i = 0; i < (width -2) * height; i++) {
         const horizontalThree = [i, i + 1, i + 2];
         const checkColor = grid[i];
-        if (horizontalThree.every((number) => grid[number] === checkColor)) {
-          horizontalThree.forEach((number) => (grid[number] = ""));
+        if (horizontalThree.every((tilePosition) => grid[tilePosition] === checkColor)) {
+          horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
         }
     }
   }
