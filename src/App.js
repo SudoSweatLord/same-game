@@ -13,6 +13,8 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
+  const [tilebeingDragged, setTileBeingDragged] = useState([]);
+  const [tileBeingReplaced, setTileBeingReplaced] = useState(null);
 
   const checkForVerticalThree = () => {
     for (let i = 0; i < width * (height - 2); i++) {
@@ -57,14 +59,20 @@ const App = () => {
   };
 
   const dragStart = (e) => {
-    console.log("drag start");
-  }
+    // console.log("drag start", e.target);
+    setTileBeingDragged(e.target);
+  };
   const dragDrop = (e) => {
-    console.log("drag drop");
-  }
+    // console.log("drag drop", e.target);
+    setTileBeingReplaced(e.target);
+  };
   const dragEnd = (e) => {
-    console.log("drag end");
-  }
+    // console.log("drag end", e.target);
+    const tileBeingDraggedID =
+      parseInt(tilebeingDragged.getAttribute("data-id"));
+    const tileBeingReplacedID = parseInt(tileBeingReplaced.getAttribute("data-id"));
+    console.log(tileBeingReplacedID, tileBeingDraggedID);
+  };
 
   const createGrid = () => {
     const grid = [];
@@ -95,7 +103,21 @@ const App = () => {
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
-          return <img key={index} src={tileColor} alt={colorName} data-id={index} draggable={true} onDragStart={dragStart} onDragOver={(e) => e.preventDefault()} onDragEnter={(e) => e.preventDefault()} onDragLeave={(e) => e.preventDefault()} onDrop={dragDrop} onDragEnd={dragEnd}></img>;
+          return (
+            <img
+              key={index}
+              src={tileColor}
+              alt={colorName}
+              data-id={index}
+              draggable={true}
+              onDragStart={dragStart}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnter={(e) => e.preventDefault()}
+              onDragLeave={(e) => e.preventDefault()}
+              onDrop={dragDrop}
+              onDragEnd={dragEnd}
+            ></img>
+          );
         })}
       </div>
     </div>
