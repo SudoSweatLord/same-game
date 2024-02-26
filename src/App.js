@@ -4,6 +4,7 @@ import blueTile from "./tiles/blue.png";
 import greenTile from "./tiles/green.png";
 import orangeTile from "./tiles/orange.png";
 import purpleTile from "./tiles/purple.png";
+import Header from "./Header";
 
 // grid
 const width = 20;
@@ -68,9 +69,12 @@ const App = () => {
   };
   const dragEnd = (e) => {
     // console.log("drag end", e.target);
-    const tileBeingDraggedID =
-      parseInt(tilebeingDragged.getAttribute("data-id"));
-    const tileBeingReplacedID = parseInt(tileBeingReplaced.getAttribute("data-id"));
+    const tileBeingDraggedID = parseInt(
+      tilebeingDragged.getAttribute("data-id")
+    );
+    const tileBeingReplacedID = parseInt(
+      tileBeingReplaced.getAttribute("data-id")
+    );
     grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
     grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
     console.log(tileBeingReplacedID, tileBeingDraggedID);
@@ -102,6 +106,7 @@ const App = () => {
   }, [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]);
   return (
     <div className="app">
+      <Header />
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
