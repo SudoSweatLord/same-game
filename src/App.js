@@ -71,6 +71,8 @@ const App = () => {
     const tileBeingDraggedID =
       parseInt(tilebeingDragged.getAttribute("data-id"));
     const tileBeingReplacedID = parseInt(tileBeingReplaced.getAttribute("data-id"));
+    grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
+    grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
     console.log(tileBeingReplacedID, tileBeingDraggedID);
   };
 
@@ -95,7 +97,7 @@ const App = () => {
       checkForHorizontalThree();
       moveTilesDown();
       setGrid([...grid]);
-    }, 1000);
+    }, 200);
     return () => clearInterval(interval);
   }, [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]);
   return (
