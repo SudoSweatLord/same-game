@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./index.css";
-import blueTile from "./tiles/blue.png";
-import greenTile from "./tiles/green.png";
-import orangeTile from "./tiles/orange.png";
-import purpleTile from "./tiles/purple.png";
+import blueTile from "./resources/blue.png";
+import greenTile from "./resources/green.png";
+import orangeTile from "./resources/orange.png";
+import purpleTile from "./resources/purple.png";
 import Header from "./Header";
+import Background from "./Background";
 
 // grid
 const width = 20;
@@ -106,7 +107,8 @@ const App = () => {
   }, [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]);
   return (
     <div className="app">
-      <Header />
+      <Header/>
+      <Background />
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
