@@ -15,34 +15,85 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
-  const [tilebeingDragged, setTileBeingDragged] = useState([]);
-  const [tileBeingReplaced, setTileBeingReplaced] = useState(null);
+  // const [tilebeingDragged, setTileBeingDragged] = useState([]);
+  // const [tileBeingReplaced, setTileBeingReplaced] = useState(null);
 
-  const checkForVerticalThree = () => {
-    for (let i = 0; i < width * (height - 2); i++) {
-      const verticalThree = [i, i + width, i + width * 2];
-      const checkColor = grid[i];
-      if (
-        verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)
-      ) {
-        verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-      }
+  /**
+   * Checks for vertical groups of three or more tiles with the same color and removes them from the grid.
+   */
+  // const checkForVerticalThree = () => {
+  //   for (let i = 0; i < width * (height - 2); i++) {
+  //     const verticalThree = [i, i + width, i + width * 2];
+  //     const checkColor = grid[i];
+  //     if (
+  //       verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)
+  //     ) {
+  //       verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
+  //     }
+  //   }
+  // };
+const removeLinkedTiles = (position) => {
+  const newGrid = [...grid];
+  const color = newGrid[position];
+
+  const checkAdjacentTiles = (adjacentPosition) => {
+    if (
+      adjacentPosition >= 0 &&
+      adjacentPosition < width * height &&
+      newGrid[adjacentPosition] === color
+    ) {
+      newGrid[adjacentPosition] = "";
+
+      const adjacentTiles = [
+        adjacentPosition - 1, // left tile
+        adjacentPosition + 1, // right tile
+        adjacentPosition - width, // top tile
+        adjacentPosition + width // bottom tile
+      ];
+
+      adjacentTiles.forEach((adjacent) => {
+        if (newGrid[adjacent] === color) {
+          checkAdjacentTiles(adjacent);
+        }
+      });
     }
   };
 
-  const checkForHorizontalThree = () => {
-    for (let i = 0; i < (width - 2) * height; i++) {
-      const horizontalThree = [i, i + 1, i + 2];
-      const checkColor = grid[i];
-      if (
-        horizontalThree.every(
-          (tilePosition) => grid[tilePosition] === checkColor
-        )
-      ) {
-        horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-      }
-    }
-  };
+  checkAdjacentTiles(position);
+  setGrid(newGrid);
+};
+
+const handleClick = (position) => {
+  removeLinkedTiles(position);
+};
+
+const renderGrid = () => {
+  return grid.map((tile, position) => (
+    <div
+      key={position}
+      className="tile"
+      style={{ backgroundColor: tile }}
+      onClick={() => handleClick(position)}
+    ></div>
+  ));
+};
+
+// ... rest of the code
+
+
+  // const checkForHorizontalThree = () => {
+  //   for (let i = 0; i < (width - 2) * height; i++) {
+  //     const horizontalThree = [i, i + 1, i + 2];
+  //     const checkColor = grid[i];
+  //     if (
+  //       horizontalThree.every(
+  //         (tilePosition) => grid[tilePosition] === checkColor
+  //       )
+  //     ) {
+  //       horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
+  //     }
+  //   }
+  // };
   const moveTilesDown = () => {
     for (let i = 0; i < width * (height - 1); i++) {
       const firstRow = [...Array(width).keys()].map((n) => n + i);
@@ -60,26 +111,26 @@ const App = () => {
     }
   };
 
-  const dragStart = (e) => {
-    // console.log("drag start", e.target);
-    setTileBeingDragged(e.target);
-  };
-  const dragDrop = (e) => {
-    // console.log("drag drop", e.target);
-    setTileBeingReplaced(e.target);
-  };
-  const dragEnd = (e) => {
-    // console.log("drag end", e.target);
-    const tileBeingDraggedID = parseInt(
-      tilebeingDragged.getAttribute("data-id")
-    );
-    const tileBeingReplacedID = parseInt(
-      tileBeingReplaced.getAttribute("data-id")
-    );
-    grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
-    grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
-    console.log(tileBeingReplacedID, tileBeingDraggedID);
-  };
+  // const dragStart = (e) => {
+  //   // console.log("drag start", e.target);
+  //   setTileBeingDragged(e.target);
+  // };
+  // const dragDrop = (e) => {
+  //   // console.log("drag drop", e.target);
+  //   setTileBeingReplaced(e.target);
+  // };
+  // const dragEnd = (e) => {
+  //   // console.log("drag end", e.target);
+  //   const tileBeingDraggedID = parseInt(
+  //     tilebeingDragged.getAttribute("data-id")
+  //   );
+  //   const tileBeingReplacedID = parseInt(
+  //     tileBeingReplaced.getAttribute("data-id")
+  //   );
+  //   grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
+  //   grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
+  //   console.log(tileBeingReplacedID, tileBeingDraggedID);
+  // };
 
   const createGrid = () => {
     const grid = [];
@@ -98,13 +149,12 @@ const App = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       // check for 4 would be here so it gets executed prior to the 3
-      checkForVerticalThree();
-      checkForHorizontalThree();
+      removeLinkedTiles();
       moveTilesDown();
       setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [checkForVerticalThree, checkForHorizontalThree, moveTilesDown, grid]);
+  }, [/*checkForVerticalThree, checkForHorizontalThree,*/ removeLinkedTiles, moveTilesDown, grid]);
   return (
     <div className="app">
       <Header/>
@@ -118,13 +168,14 @@ const App = () => {
               src={tileColor}
               alt={colorName}
               data-id={index}
-              draggable={true}
-              onDragStart={dragStart}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnter={(e) => e.preventDefault()}
-              onDragLeave={(e) => e.preventDefault()}
-              onDrop={dragDrop}
-              onDragEnd={dragEnd}
+              onClick={removeLinkedTiles}
+              // draggable={true}
+              // onDragStart={dragStart}
+              // onDragOver={(e) => e.preventDefault()}
+              // onDragEnter={(e) => e.preventDefault()}
+              // onDragLeave={(e) => e.preventDefault()}
+              // onDrop={dragDrop}
+              // onDragEnd={dragEnd}
             ></img>
           );
         })}
