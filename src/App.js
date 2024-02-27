@@ -48,10 +48,10 @@ const App = () => {
       const firstRow = [...Array(width).keys()].map((n) => n + i);
       const isFirstRow = firstRow.includes(i);
 
-      if (isFirstRow && grid[i] === "") {
-        let randomTile = Math.floor(Math.random() * tileColors.length);
-        grid[i] = tileColors[randomTile];
-      }
+      // if (isFirstRow && grid[i] === "") {
+      //   let randomTile = Math.floor(Math.random() * tileColors.length);
+      //   grid[i] = tileColors[randomTile];
+      // }
 
       if (grid[i + width] === "") {
         grid[i + width] = grid[i];
