@@ -34,13 +34,14 @@ const App = () => {
   // };
 const removeLinkedTiles = (position) => {
   const newGrid = [...grid];
-  const color = newGrid[position];
+  // const color = newGrid[position];
+  const tile = newGrid[position];
 
   const checkAdjacentTiles = (adjacentPosition) => {
     if (
       adjacentPosition >= 0 &&
       adjacentPosition < width * height &&
-      newGrid[adjacentPosition] === color
+      newGrid[adjacentPosition] === tile
     ) {
       newGrid[adjacentPosition] = "";
 
@@ -52,7 +53,7 @@ const removeLinkedTiles = (position) => {
       ];
 
       adjacentTiles.forEach((adjacent) => {
-        if (newGrid[adjacent] === color) {
+        if (newGrid[adjacent] === tile) {
           checkAdjacentTiles(adjacent);
         }
       });
