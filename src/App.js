@@ -15,23 +15,7 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
-  // const [tilebeingDragged, setTileBeingDragged] = useState([]);
-  // const [tileBeingReplaced, setTileBeingReplaced] = useState(null);
 
-  /**
-   * Checks for vertical groups of three or more tiles with the same color and removes them from the grid.
-   */
-  // const checkForVerticalThree = () => {
-  //   for (let i = 0; i < width * (height - 2); i++) {
-  //     const verticalThree = [i, i + width, i + width * 2];
-  //     const checkColor = grid[i];
-  //     if (
-  //       verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)
-  //     ) {
-  //       verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-  //     }
-  //   }
-  // };
   const removeLinkedTiles = (position) => {
     console.log("position ===", position);
     const newGrid = [...grid];
@@ -80,30 +64,10 @@ const App = () => {
     ));
   };
 
-  // ... rest of the code
-
-  // const checkForHorizontalThree = () => {
-  //   for (let i = 0; i < (width - 2) * height; i++) {
-  //     const horizontalThree = [i, i + 1, i + 2];
-  //     const checkColor = grid[i];
-  //     if (
-  //       horizontalThree.every(
-  //         (tilePosition) => grid[tilePosition] === checkColor
-  //       )
-  //     ) {
-  //       horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-  //     }
-  //   }
-  // };
   const moveTilesDown = () => {
     for (let i = 0; i < width * (height - 1); i++) {
       const firstRow = [...Array(width).keys()].map((n) => n + i);
       const isFirstRow = firstRow.includes(i);
-
-      // if (isFirstRow && grid[i] === "") {
-      //   let randomTile = Math.floor(Math.random() * tileColors.length);
-      //   grid[i] = tileColors[randomTile];
-      // }
 
       if (grid[i + width] === "") {
         grid[i + width] = grid[i];
@@ -111,27 +75,6 @@ const App = () => {
       }
     }
   };
-
-  // const dragStart = (e) => {
-  //   // console.log("drag start", e.target);
-  //   setTileBeingDragged(e.target);
-  // };
-  // const dragDrop = (e) => {
-  //   // console.log("drag drop", e.target);
-  //   setTileBeingReplaced(e.target);
-  // };
-  // const dragEnd = (e) => {
-  //   // console.log("drag end", e.target);
-  //   const tileBeingDraggedID = parseInt(
-  //     tilebeingDragged.getAttribute("data-id")
-  //   );
-  //   const tileBeingReplacedID = parseInt(
-  //     tileBeingReplaced.getAttribute("data-id")
-  //   );
-  //   grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
-  //   grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
-  //   console.log(tileBeingReplacedID, tileBeingDraggedID);
-  // };
 
   const createGrid = () => {
     const grid = [];
@@ -149,17 +92,12 @@ const App = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // check for 4 would be here so it gets executed prior to the 3
       removeLinkedTiles();
       moveTilesDown();
       setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [
-    /*checkForVerticalThree, checkForHorizontalThree,*/ removeLinkedTiles,
-    moveTilesDown,
-    grid,
-  ]);
+  }, [removeLinkedTiles, moveTilesDown, grid]);
 
   return (
     <div className="app">
@@ -175,13 +113,6 @@ const App = () => {
               alt={colorName}
               data-id={index}
               onClick={removeLinkedTiles}
-              // draggable={true}
-              // onDragStart={dragStart}
-              // onDragOver={(e) => e.preventDefault()}
-              // onDragEnter={(e) => e.preventDefault()}
-              // onDragLeave={(e) => e.preventDefault()}
-              // onDrop={dragDrop}
-              // onDragEnd={dragEnd}
             ></img>
           );
         })}
