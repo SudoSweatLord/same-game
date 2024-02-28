@@ -32,55 +32,55 @@ const App = () => {
   //     }
   //   }
   // };
-const removeLinkedTiles = (position) => {
-  const newGrid = [...grid];
-  // const color = newGrid[position];
-  const tile = newGrid[position];
+  const removeLinkedTiles = (position) => {
+    console.log("position ===", position);
+    const newGrid = [...grid];
+    // const color = newGrid[position];
+    const tile = newGrid[position];
 
-  const checkAdjacentTiles = (adjacentPosition) => {
-    if (
-      adjacentPosition >= 0 &&
-      adjacentPosition < width * height &&
-      newGrid[adjacentPosition] === tile
-    ) {
-      newGrid[adjacentPosition] = "";
+    const checkAdjacentTiles = (adjacentPosition) => {
+      if (
+        adjacentPosition >= 0 &&
+        adjacentPosition < width * height &&
+        newGrid[adjacentPosition] === tile
+      ) {
+        newGrid[adjacentPosition] = "";
 
-      const adjacentTiles = [
-        adjacentPosition - 1, // left tile
-        adjacentPosition + 1, // right tile
-        adjacentPosition - width, // top tile
-        adjacentPosition + width // bottom tile
-      ];
+        const adjacentTiles = [
+          adjacentPosition - 1, // left tile
+          adjacentPosition + 1, // right tile
+          adjacentPosition - width, // top tile
+          adjacentPosition + width, // bottom tile
+        ];
 
-      adjacentTiles.forEach((adjacent) => {
-        if (newGrid[adjacent] === tile) {
-          checkAdjacentTiles(adjacent);
-        }
-      });
-    }
+        adjacentTiles.forEach((adjacent) => {
+          if (newGrid[adjacent] === tile) {
+            checkAdjacentTiles(adjacent);
+          }
+        });
+      }
+    };
+
+    checkAdjacentTiles(position);
+    setGrid(newGrid);
   };
 
-  checkAdjacentTiles(position);
-  setGrid(newGrid);
-};
+  const handleClick = (position) => {
+    removeLinkedTiles(position);
+  };
 
-const handleClick = (position) => {
-  removeLinkedTiles(position);
-};
+  const renderGrid = () => {
+    return grid.map((tile, position) => (
+      <div
+        key={position}
+        className="tile"
+        style={{ backgroundColor: tile }}
+        onClick={() => handleClick(position)}
+      ></div>
+    ));
+  };
 
-const renderGrid = () => {
-  return grid.map((tile, position) => (
-    <div
-      key={position}
-      className="tile"
-      style={{ backgroundColor: tile }}
-      onClick={() => handleClick(position)}
-    ></div>
-  ));
-};
-
-// ... rest of the code
-
+  // ... rest of the code
 
   // const checkForHorizontalThree = () => {
   //   for (let i = 0; i < (width - 2) * height; i++) {
@@ -155,10 +155,15 @@ const renderGrid = () => {
       setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [/*checkForVerticalThree, checkForHorizontalThree,*/ removeLinkedTiles, moveTilesDown, grid]);
+  }, [
+    /*checkForVerticalThree, checkForHorizontalThree,*/ removeLinkedTiles,
+    moveTilesDown,
+    grid,
+  ]);
+
   return (
     <div className="app">
-      <Header/>
+      <Header />
       <Background />
       <div className="game">
         {grid.map((tileColor, index) => {
