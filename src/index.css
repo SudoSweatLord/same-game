@@ -12,6 +12,7 @@ background-color: darkgrey;
   width: 1000px;
   height: 500px;
   border: 20px solid #3b3a3a;
+  position: fixed;
 }
 
 .game img {
