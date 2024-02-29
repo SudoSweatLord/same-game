@@ -54,17 +54,17 @@ const App = () => {
     moveTilesDown()
   };
 
-  const moveTilesDown = () => {
-    for (let i = 0; i < width * (height - 1); i++) {
-      const firstRow = [...Array(width).keys()].map((n) => n + i);
-      const isFirstRow = firstRow.includes(i);
+  // const moveTilesDown = () => {
+  //   for (let i = 0; i < width * (height - 1); i++) {
+  //     const firstRow = [...Array(width).keys()].map((n) => n + i);
+  //     const isFirstRow = firstRow.includes(i);
 
-      if (grid[i + width] === "") {
-        grid[i + width] = grid[i];
-        grid[i] = "";
-      }
-    }
-  };
+  //     if (grid[i + width] === "") {
+  //       grid[i + width] = grid[i];
+  //       grid[i] = "";
+  //     }
+  //   }
+  // };
 
   const createGrid = () => {
     const grid = [];
