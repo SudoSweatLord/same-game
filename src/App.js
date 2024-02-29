@@ -16,6 +16,12 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 const App = () => {
   const [grid, setGrid] = useState([]);
   // declared with useCallback hook to return memorized version
+  
+    // Function to restart the game
+    const restartGame = () => {
+      createGrid();
+    };
+  
   const removeLinkedTiles = useCallback(
     (position) => {
       console.log("position ===", position);
@@ -118,6 +124,9 @@ const App = () => {
 
   return (
     <div className="app">
+      <button className="restart-button" onClick={restartGame}>
+        Restart
+      </button>
       <Header />
       <Background />
       <div className="game">
@@ -143,6 +152,7 @@ const App = () => {
         })}
       </div>
     </div>
+    
   );
 };
 export default App;
