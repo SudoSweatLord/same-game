@@ -1,4 +1,4 @@
-# Same Game
+# Same Game Clone
 
 SameGame (さめがめ) is a tile-matching puzzle video game originally released under the name CHAIN SHOT in 1985 by Kuniaki "Morisuke" Moribe. It has since been ported to numerous computer platforms, handheld devices, and even TiVo, with new versions as of 2016.
 
@@ -22,7 +22,7 @@ The useEffect hook is used to call the createGrid function when the component is
 
 In the returned JSX, the grid array is mapped to a list of img elements, each representing a tile in the grid. When a tile is clicked, the handleClick function is called with the position of the clicked tile.
 
-## This project wouldn't have been possible without:
+## This project wouldn't have been possible without
 
 -Kuniaki Moribe who invented the game in 1985
 -Ania K. for the starting template
