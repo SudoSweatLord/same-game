@@ -7,7 +7,7 @@ import purpleTile from "./resources/purple.png";
 import Header from "./Header";
 import Background from "./Background";
 
-// grid
+// grid is a 1-dimensional array
 const width = 20;
 const height = 10;
 
@@ -15,11 +15,12 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
-
+  // declared with useCallback hook to return memorized version
   const removeLinkedTiles = useCallback(
     (position) => {
       console.log("position ===", position);
-      // search same color and connected tiles
+      // search same color and connected tiles using a breadth-first algorithm
+
       const sameColorTiles = [];
       const color = grid[position];
       const visited = new Array(width * height).fill(false);
@@ -122,14 +123,22 @@ const App = () => {
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
-          return (
+          return tileColor ? (
             <img
               key={index}
               src={tileColor}
               alt={colorName}
               data-id={index}
               onClick={() => handleClick(index)}
-            ></img>
+            />
+          ) : (
+            <canvas
+              key={index}
+              id="empty"
+              width="50"
+              height="50"
+              // style={{ backgroundColor: 'red' }}
+            ></canvas>
           );
         })}
       </div>
