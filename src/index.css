@@ -1,9 +1,11 @@
 body {
-background-color: darkgrey;
+  background-color: darkgrey;
 }
 .app {
   display: flex;
   padding: 13px;
+  padding-top: 60px;
+  justify-content: center;
 }
 
 .game {
@@ -11,7 +13,7 @@ background-color: darkgrey;
   flex-wrap: wrap;
   width: 1000px;
   height: 500px;
-  border: 20px solid #3b3a3a;
+  border: 23px solid #3b3a3a;
   position: fixed;
 }
 
