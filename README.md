@@ -32,7 +32,7 @@ In the returned JSX, the grid array is mapped to a list of img elements, each re
 - University of Texas at Austin for code snippets and ideas
 - Carsten K. for helping me with the breadth-first algorithm
 - Klaus S. for believing in me
-- My partner for the support
+- My partner Marta for the support and love
 - The entire team of Spiced Academy
 - The entire team of ChatGPT
 
