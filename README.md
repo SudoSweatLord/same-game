@@ -30,6 +30,7 @@ In the returned JSX, the grid array is mapped to a list of img elements, each re
 - gaborbata for code snippets and ideas
 - greweb for code snippets and ideas
 - University of Texas at Austin for code snippets and ideas
+- Adrian S. for helping me 
 - Carsten K. for helping me with the breadth-first algorithm
 - Klaus S. for believing in me
 - My partner Marta for the support and love
