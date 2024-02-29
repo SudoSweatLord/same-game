@@ -51,17 +51,7 @@ const App = () => {
 
   const handleClick = (position) => {
     removeLinkedTiles(position);
-  };
-
-  const renderGrid = () => {
-    return grid.map((tile, position) => (
-      <div
-        key={position}
-        className="tile"
-        style={{ backgroundColor: tile }}
-        onClick={() => handleClick(position)}
-      ></div>
-    ));
+    moveTilesDown()
   };
 
   const moveTilesDown = () => {
@@ -112,7 +102,7 @@ const App = () => {
               src={tileColor}
               alt={colorName}
               data-id={index}
-              onClick={removeLinkedTiles}
+              onClick={() => handleClick}
             ></img>
           );
         })}
