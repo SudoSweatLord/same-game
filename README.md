@@ -26,7 +26,7 @@ In the returned JSX, the grid array is mapped to a list of img elements, each re
 ## This project wouldn't have been possible without
 
 - Kuniaki Moribe who invented the game in 1985
-- Ania K. for the starting template
+- Ania K. for the starting template and tutorial
 - gaborbata for code snippets and ideas
 - greweb for code snippets and ideas
 - University of Texas at Austin for code snippets and ideas
