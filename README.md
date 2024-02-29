@@ -1,6 +1,6 @@
 # Same Game Clone
 
-SameGame (さめがめ) is a tile-matching puzzle video game originally released under the name CHAIN SHOT in 1985 by Kuniaki "Morisuke" Moribe. It has since been ported to numerous computer platforms, handheld devices, and even TiVo, with new versions as of 2016.
+"SameGame (さめがめ) is a tile-matching puzzle video game originally released under the name CHAIN SHOT in 1985 by Kuniaki "Morisuke" Moribe. It has since been ported to numerous computer platforms, handheld devices, and even TiVo, with new versions as of 2016."
 -Wikipedia
 
 ## Description
