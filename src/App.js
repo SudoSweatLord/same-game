@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "./index.css";
 import blueTile from "./resources/blue.png";
 import greenTile from "./resources/green.png";
@@ -16,55 +16,77 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 const App = () => {
   const [grid, setGrid] = useState([]);
 
-  const removeLinkedTiles = (position) => {
-    console.log("position ===", position);
-    const newGrid = [...grid];
-    // const color = newGrid[position];
-    const tile = newGrid[position];
-
-    const checkAdjacentTiles = (adjacentPosition) => {
-      if (
-        adjacentPosition >= 0 &&
-        adjacentPosition < width * height &&
-        newGrid[adjacentPosition] === tile
-      ) {
-        newGrid[adjacentPosition] = "";
-
-        const adjacentTiles = [
-          adjacentPosition - 1, // left tile
-          adjacentPosition + 1, // right tile
-          adjacentPosition - width, // top tile
-          adjacentPosition + width, // bottom tile
-        ];
-
-        adjacentTiles.forEach((adjacent) => {
-          if (newGrid[adjacent] === tile) {
-            checkAdjacentTiles(adjacent);
+  const removeLinkedTiles = useCallback(
+    (position) => {
+      console.log("position ===", position);
+      // search same color and connected tiles
+      const sameColorTiles = [];
+      const color = grid[position];
+      const visited = new Array(width * height).fill(false);
+      const queue = [position];
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (visited[current]) {
+          continue;
+        }
+        visited[current] = true;
+        if (grid[current] === color) {
+          sameColorTiles.push(current);
+          const currentRow = Math.floor(current / width);
+          const currentColumn = current % width;
+          if (currentRow > 0) {
+            queue.push(current - width);
           }
+          if (currentRow < height - 1) {
+            queue.push(current + width);
+          }
+          if (currentColumn > 0) {
+            queue.push(current - 1);
+          }
+          if (currentColumn < width - 1) {
+            queue.push(current + 1);
+          }
+        }
+      }
+      console.log("sameColorTiles ===", sameColorTiles);
+      if (sameColorTiles.length >= 3) {
+        sameColorTiles.forEach((position) => {
+          grid[position] = "";
         });
       }
-    };
+      // Create a copy of the grid and remove the linked tiles
+      let newGrid = [...grid];
+      if (sameColorTiles.length >= 3) {
+        sameColorTiles.forEach((position) => {
+          newGrid[position] = "";
+        });
+      }
 
-    checkAdjacentTiles(position);
-    setGrid(newGrid);
-  };
+      // Update the grid state with the new grid
+      setGrid(newGrid);
+    },
+    [grid]
+  );
 
-  const handleClick = (position) => {
-    removeLinkedTiles(position);
-    moveTilesDown()
-  };
+  const moveTilesDown = useCallback(() => {
+    let newGrid = [...grid]; // Create a copy of the grid
+    for (let i = 0; i < width; i++) {
+      let column = [];
+      for (let j = 0; j < height; j++) {
+        if (newGrid[i + j * width] !== "") {
+          column.push(newGrid[i + j * width]);
+        }
+      }
+      while (column.length < height) {
+        column.unshift(""); // Add empty tiles at the top
+      }
+      for (let j = 0; j < height; j++) {
+        newGrid[i + j * width] = column[j];
+      }
+    }
 
-  // const moveTilesDown = () => {
-  //   for (let i = 0; i < width * (height - 1); i++) {
-  //     const firstRow = [...Array(width).keys()].map((n) => n + i);
-  //     const isFirstRow = firstRow.includes(i);
-
-  //     if (grid[i + width] === "") {
-  //       grid[i + width] = grid[i];
-  //       grid[i] = "";
-  //     }
-  //   }
-  // };
+    setGrid(newGrid); // Update the grid state with the new grid
+  }, [grid, setGrid]);
 
   const createGrid = () => {
     const grid = [];
@@ -74,6 +96,11 @@ const App = () => {
       grid.push(randomTile);
     }
     setGrid(grid);
+  };
+
+  const handleClick = (position) => {
+    removeLinkedTiles(position);
+    moveTilesDown();
   };
 
   useEffect(() => {
