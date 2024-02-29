@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 function Background() {
   return (
     <video id="background-video" autoPlay loop muted poster="">
