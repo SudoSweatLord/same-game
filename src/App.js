@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "./index.css";
 import blueTile from "./resources/blue.png";
 import greenTile from "./resources/green.png";
@@ -7,7 +7,7 @@ import purpleTile from "./resources/purple.png";
 import Header from "./Header";
 import Background from "./Background";
 
-// grid
+// grid is a 1-dimensional array
 const width = 20;
 const height = 10;
 
@@ -15,123 +15,79 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
-  // const [tilebeingDragged, setTileBeingDragged] = useState([]);
-  // const [tileBeingReplaced, setTileBeingReplaced] = useState(null);
+  // declared with useCallback hook to return memorized version
+  const removeLinkedTiles = useCallback(
+    (position) => {
+      console.log("position ===", position);
+      // search same color and connected tiles using a breadth-first algorithm
 
-  /**
-   * Checks for vertical groups of three or more tiles with the same color and removes them from the grid.
-   */
-  // const checkForVerticalThree = () => {
-  //   for (let i = 0; i < width * (height - 2); i++) {
-  //     const verticalThree = [i, i + width, i + width * 2];
-  //     const checkColor = grid[i];
-  //     if (
-  //       verticalThree.every((tilePosition) => grid[tilePosition] === checkColor)
-  //     ) {
-  //       verticalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-  //     }
-  //   }
-  // };
-  const removeLinkedTiles = (position) => {
-    console.log("position ===", position);
-    const newGrid = [...grid];
-    // const color = newGrid[position];
-    const tile = newGrid[position];
-
-    const checkAdjacentTiles = (adjacentPosition) => {
-      if (
-        adjacentPosition >= 0 &&
-        adjacentPosition < width * height &&
-        newGrid[adjacentPosition] === tile
-      ) {
-        newGrid[adjacentPosition] = "";
-
-        const adjacentTiles = [
-          adjacentPosition - 1, // left tile
-          adjacentPosition + 1, // right tile
-          adjacentPosition - width, // top tile
-          adjacentPosition + width, // bottom tile
-        ];
-
-        adjacentTiles.forEach((adjacent) => {
-          if (newGrid[adjacent] === tile) {
-            checkAdjacentTiles(adjacent);
+      const sameColorTiles = [];
+      const color = grid[position];
+      const visited = new Array(width * height).fill(false);
+      const queue = [position];
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (visited[current]) {
+          continue;
+        }
+        visited[current] = true;
+        if (grid[current] === color) {
+          sameColorTiles.push(current);
+          const currentRow = Math.floor(current / width);
+          const currentColumn = current % width;
+          if (currentRow > 0) {
+            queue.push(current - width);
           }
+          if (currentRow < height - 1) {
+            queue.push(current + width);
+          }
+          if (currentColumn > 0) {
+            queue.push(current - 1);
+          }
+          if (currentColumn < width - 1) {
+            queue.push(current + 1);
+          }
+        }
+      }
+      console.log("sameColorTiles ===", sameColorTiles);
+      if (sameColorTiles.length >= 3) {
+        sameColorTiles.forEach((position) => {
+          grid[position] = "";
         });
       }
-    };
+      // Create a copy of the grid and remove the linked tiles
+      let newGrid = [...grid];
+      if (sameColorTiles.length >= 3) {
+        sameColorTiles.forEach((position) => {
+          newGrid[position] = "";
+        });
+      }
 
-    checkAdjacentTiles(position);
-    setGrid(newGrid);
-  };
+      // Update the grid state with the new grid
+      setGrid(newGrid);
+    },
+    [grid]
+  );
 
-  const handleClick = (position) => {
-    removeLinkedTiles(position);
-  };
-
-  const renderGrid = () => {
-    return grid.map((tile, position) => (
-      <div
-        key={position}
-        className="tile"
-        style={{ backgroundColor: tile }}
-        onClick={() => handleClick(position)}
-      ></div>
-    ));
-  };
-
-  // ... rest of the code
-
-  // const checkForHorizontalThree = () => {
-  //   for (let i = 0; i < (width - 2) * height; i++) {
-  //     const horizontalThree = [i, i + 1, i + 2];
-  //     const checkColor = grid[i];
-  //     if (
-  //       horizontalThree.every(
-  //         (tilePosition) => grid[tilePosition] === checkColor
-  //       )
-  //     ) {
-  //       horizontalThree.forEach((tilePosition) => (grid[tilePosition] = ""));
-  //     }
-  //   }
-  // };
-  const moveTilesDown = () => {
-    for (let i = 0; i < width * (height - 1); i++) {
-      const firstRow = [...Array(width).keys()].map((n) => n + i);
-      const isFirstRow = firstRow.includes(i);
-
-      // if (isFirstRow && grid[i] === "") {
-      //   let randomTile = Math.floor(Math.random() * tileColors.length);
-      //   grid[i] = tileColors[randomTile];
-      // }
-
-      if (grid[i + width] === "") {
-        grid[i + width] = grid[i];
-        grid[i] = "";
+  const moveTilesDown = useCallback(() => {
+    let newGrid = [...grid]; // Create a copy of the grid
+    for (let i = 0; i < width; i++) {
+      let column = [];
+      for (let j = 0; j < height; j++) {
+        if (newGrid[i + j * width] !== "") {
+          column.push(newGrid[i + j * width]);
+        }
+      }
+      while (column.length < height) {
+        column.unshift(""); // Add empty tiles at the top
+      }
+      for (let j = 0; j < height; j++) {
+        newGrid[i + j * width] = column[j];
       }
     }
-  };
 
-  // const dragStart = (e) => {
-  //   // console.log("drag start", e.target);
-  //   setTileBeingDragged(e.target);
-  // };
-  // const dragDrop = (e) => {
-  //   // console.log("drag drop", e.target);
-  //   setTileBeingReplaced(e.target);
-  // };
-  // const dragEnd = (e) => {
-  //   // console.log("drag end", e.target);
-  //   const tileBeingDraggedID = parseInt(
-  //     tilebeingDragged.getAttribute("data-id")
-  //   );
-  //   const tileBeingReplacedID = parseInt(
-  //     tileBeingReplaced.getAttribute("data-id")
-  //   );
-  //   grid[tileBeingReplacedID] = tilebeingDragged.getAttribute("src");
-  //   grid[tileBeingDraggedID] = tileBeingReplaced.getAttribute("src");
-  //   console.log(tileBeingReplacedID, tileBeingDraggedID);
-  // };
+    setGrid(newGrid); // Update the grid state with the new grid
+  }, [grid, setGrid]);
 
   const createGrid = () => {
     const grid = [];
@@ -143,23 +99,22 @@ const App = () => {
     setGrid(grid);
   };
 
+  const handleClick = (position) => {
+    removeLinkedTiles(position);
+    moveTilesDown();
+  };
+
   useEffect(() => {
     createGrid();
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // check for 4 would be here so it gets executed prior to the 3
-      removeLinkedTiles();
       moveTilesDown();
       setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [
-    /*checkForVerticalThree, checkForHorizontalThree,*/ removeLinkedTiles,
-    moveTilesDown,
-    grid,
-  ]);
+  }, [moveTilesDown, grid]);
 
   return (
     <div className="app">
@@ -168,21 +123,22 @@ const App = () => {
       <div className="game">
         {grid.map((tileColor, index) => {
           const colorName = tileColor.split("/").pop().split(".")[0];
-          return (
+          return tileColor ? (
             <img
               key={index}
               src={tileColor}
               alt={colorName}
               data-id={index}
-              onClick={removeLinkedTiles}
-              // draggable={true}
-              // onDragStart={dragStart}
-              // onDragOver={(e) => e.preventDefault()}
-              // onDragEnter={(e) => e.preventDefault()}
-              // onDragLeave={(e) => e.preventDefault()}
-              // onDrop={dragDrop}
-              // onDragEnd={dragEnd}
-            ></img>
+              onClick={() => handleClick(index)}
+            />
+          ) : (
+            <canvas
+              key={index}
+              id="empty"
+              width="50"
+              height="50"
+              // style={{ backgroundColor: 'red' }}
+            ></canvas>
           );
         })}
       </div>
