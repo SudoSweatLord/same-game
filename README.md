@@ -24,16 +24,16 @@ In the returned JSX, the grid array is mapped to a list of img elements, each re
 
 ## This project wouldn't have been possible without
 
--Kuniaki Moribe who invented the game in 1985
--Ania K. for the starting template
--gaborbata for code snippets and ideas
--greweb for code snippets and ideas
--University of Texas at Austin for code Snippets and ideas
--Carsten K. for helping me with the breadth-first algorithm
--Klaus S. for beliving in me
--My partner for the support
--The entire team of Spiced Academy
--The entire team of ChatGPT
+- Kuniaki Moribe who invented the game in 1985
+- Ania K. for the starting template
+- gaborbata for code snippets and ideas
+- greweb for code snippets and ideas
+- University of Texas at Austin for code snippets and ideas
+- Carsten K. for helping me with the breadth-first algorithm
+- Klaus S. for believing in me
+- My partner for the support
+- The entire team of Spiced Academy
+- The entire team of ChatGPT
 
 ### Getting Started with Create React App
 
