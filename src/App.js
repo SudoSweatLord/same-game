@@ -82,12 +82,11 @@ const App = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      removeLinkedTiles();
       moveTilesDown();
       setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [removeLinkedTiles, moveTilesDown, grid]);
+  }, [moveTilesDown, grid]);
 
   return (
     <div className="app">
@@ -102,7 +101,7 @@ const App = () => {
               src={tileColor}
               alt={colorName}
               data-id={index}
-              onClick={() => handleClick}
+              onClick={() => handleClick(index)}
             ></img>
           );
         })}
