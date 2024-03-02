@@ -7,6 +7,8 @@ import purpleTile from "./resources/purple.png";
 import Header from "./Header";
 import Background from "./Background";
 import ScoreBoard from "./ScoreBoard";
+import RestartButton from "./RestartButton";
+import GameGrid from "./GameGrid";
 
 // grid is a 1-dimensional array
 const width = 20;
@@ -121,28 +123,17 @@ const App = () => {
 
   return (
     <div className="app">
-      <button className="restart-button" onClick={restartGame}>
-        Restart
-      </button>
+      <RestartButton onClick={restartGame} />
       <ScoreBoard score={score} />
       <Header />
       <Background />
-      <div className="game">
-        {grid.map((tileColor, index) => {
-          const colorName = tileColor.split("/").pop().split(".")[0];
-          return tileColor ? (
-            <img
-              key={index}
-              src={tileColor}
-              alt={colorName}
-              data-id={index}
-              onClick={() => handleClick(index)}
-            />
-          ) : (
-            <canvas key={index} id="empty" width="50" height="50"></canvas>
-          );
-        })}
-      </div>
+      <GameGrid
+        grid={grid}
+        width={width}
+        height={height}
+        tileColors={tileColors}
+        onTileClick={handleClick}
+      />
     </div>
   );
 };
