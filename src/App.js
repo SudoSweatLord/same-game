@@ -16,19 +16,16 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 const App = () => {
   const [grid, setGrid] = useState([]);
   const [score, setScore] = useState(0);
-  // declared with useCallback hook to return memorized version
-  
-    // Function to restart the game
-    const restartGame = () => {
-      createGrid();
-      setScore(0);
-    };
-  
+
+  // Function to restart the game
+  const restartGame = () => {
+    createGrid();
+    setScore(0);
+  };
+
   const removeLinkedTiles = useCallback(
     (position) => {
       console.log("position ===", position);
-      // search same color and connected tiles using a breadth-first algorithm
-
       const sameColorTiles = [];
       const color = grid[position];
       const visited = new Array(width * height).fill(false);
@@ -59,28 +56,28 @@ const App = () => {
       }
       console.log("sameColorTiles ===", sameColorTiles);
       if (sameColorTiles.length >= 3) {
+        setScore(
+          (prevScore) =>
+            prevScore +
+            Math.pow(sameColorTiles.length - 1, sameColorTiles.length)
+        );
         sameColorTiles.forEach((position) => {
           grid[position] = "";
         });
       }
-      // Create a copy of the grid and remove the linked tiles
       let newGrid = [...grid];
       if (sameColorTiles.length >= 3) {
         sameColorTiles.forEach((position) => {
           newGrid[position] = "";
         });
-        
       }
-      
-
-      // Update the grid state with the new grid
       setGrid(newGrid);
     },
     [grid]
   );
 
   const moveTilesDown = useCallback(() => {
-    let newGrid = [...grid]; // Create a copy of the grid
+    let newGrid = [...grid];
     for (let i = 0; i < width; i++) {
       let column = [];
       for (let j = 0; j < height; j++) {
@@ -89,14 +86,13 @@ const App = () => {
         }
       }
       while (column.length < height) {
-        column.unshift(""); // Add empty tiles at the top
+        column.unshift("");
       }
       for (let j = 0; j < height; j++) {
         newGrid[i + j * width] = column[j];
       }
     }
-
-    setGrid(newGrid); // Update the grid state with the new grid
+    setGrid(newGrid);
   }, [grid, setGrid]);
 
   const createGrid = () => {
@@ -121,17 +117,16 @@ const App = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       moveTilesDown();
-      setGrid([...grid]);
     }, 200);
     return () => clearInterval(interval);
-  }, [moveTilesDown, grid]);
+  }, [moveTilesDown]);
 
   return (
     <div className="app">
       <button className="restart-button" onClick={restartGame}>
-      <div className="score">Score: {score}</div>
         Restart
       </button>
+      <div className="score-container">{`Score: ${score}`}</div>
       <Header />
       <Background />
       <div className="game">
@@ -146,18 +141,11 @@ const App = () => {
               onClick={() => handleClick(index)}
             />
           ) : (
-            <canvas
-              key={index}
-              id="empty"
-              width="50"
-              height="50"
-              // style={{ backgroundColor: 'red' }}
-            ></canvas>
+            <canvas key={index} id="empty" width="50" height="50"></canvas>
           );
         })}
       </div>
     </div>
-    
   );
 };
 export default App;
