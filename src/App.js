@@ -56,11 +56,8 @@ const App = () => {
       }
       console.log("sameColorTiles ===", sameColorTiles);
       if (sameColorTiles.length >= 3) {
-        setScore(
-          (prevScore) =>
-            prevScore +
-            Math.pow(sameColorTiles.length - 1, sameColorTiles.length)
-        );
+        const n = sameColorTiles.length;
+        setScore((prevScore) => prevScore + n * (n - 2));
         sameColorTiles.forEach((position) => {
           grid[position] = "";
         });
