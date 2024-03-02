@@ -6,6 +6,7 @@ import orangeTile from "./resources/orange.png";
 import purpleTile from "./resources/purple.png";
 import Header from "./Header";
 import Background from "./Background";
+import ScoreBoard from "./ScoreBoard";
 
 // grid is a 1-dimensional array
 const width = 20;
@@ -123,7 +124,7 @@ const App = () => {
       <button className="restart-button" onClick={restartGame}>
         Restart
       </button>
-      <div className="score-container">{`Score: ${score}`}</div>
+      <ScoreBoard score={score} />
       <Header />
       <Background />
       <div className="game">
