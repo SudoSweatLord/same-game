@@ -1,12 +1,11 @@
-// import React from 'react';
-// import { score } from './App';
+import React from 'react';
 
-// const ScoreBoard = () => {
-//     return (
-//         <>
-//             <div className="score-container">{`Score: ${score}`}</div>
-//         </>
-//     );
-// }
+const ScoreBoard = ({ score }) => {
+  return (
+    <div className="score-container">
+      Score: {score}
+    </div>
+  );
+};
 
-// export default ScoreBoard;
+export default ScoreBoard;
