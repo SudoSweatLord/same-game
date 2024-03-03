@@ -22,10 +22,13 @@ const App = () => {
     const savedScore = localStorage.getItem("score");
     return savedScore ? parseInt(savedScore, 10) : 0;
   });
-  const [topScores, setTopScores] = useState([]);
+  const [topScores, setTopScores] = useState(() => {
+    const savedTopScores = JSON.parse(localStorage.getItem("topScores")) || [];
+    return savedTopScores;
+  });
 
   const restartGame = () => {
-    saveScore(score); 
+    saveScore(score);
     createGrid();
     setScore(0);
   };
@@ -64,7 +67,7 @@ const App = () => {
       console.log("sameColorTiles ===", sameColorTiles);
       if (sameColorTiles.length >= 3) {
         const n = sameColorTiles.length;
-        setScore((prevScore) => prevScore + n * (n));
+        setScore((prevScore) => prevScore + n * n);
         sameColorTiles.forEach((position) => {
           grid[position] = "";
         });
@@ -130,29 +133,21 @@ const App = () => {
   const saveScore = (newScore) => {
     console.log("Saving score:", newScore);
     localStorage.setItem("score", newScore.toString());
-  
+
     const updatedTopScores = [...topScores, newScore]
       .sort((a, b) => b - a)
       .slice(0, 5);
-  
+
     console.log("Updated top scores:", updatedTopScores);
     localStorage.setItem("topScores", JSON.stringify(updatedTopScores));
-  
+
     setTopScores(updatedTopScores);
   };
-  
+
   return (
     <div className="app">
-      <div className="sidebar">
-        <h2>Top 5 Scores</h2>
-        <ul>
-          {topScores.map((score, index) => (
-            <li key={index}>{score}</li>
-          ))}
-        </ul>
-      </div>
       <RestartButton onClick={restartGame} />
-      <ScoreBoard score={score} />
+      <ScoreBoard score={score} topScores={topScores} />
       <Header />
       <Background />
       <GameGrid
