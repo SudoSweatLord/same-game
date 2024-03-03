@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
 
-const ScoreBoard = ({ score }) => {
+const ScoreBoard = ({ score, topScores }) => {
   return (
     <div className="score-container">
-      Score: {score}
+      <div>Score: {score}</div>
+      <h2>Top 5 Scores</h2>
+      <ul>
+        {topScores.map((score, index) => (
+          <li key={index}>{score}</li>
+        ))}
+      </ul>
     </div>
   );
 };
