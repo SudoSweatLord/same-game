@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
-const Countdown = () => {
+const Countdown = ({ onTimeUp }) => {
   const [seconds, setSeconds] = useState(60);
+  const [isActive, setIsActive] = useState(true);
 
   const countDown = () => {
-    setSeconds(prevSeconds => prevSeconds - 1);
+    setSeconds(prevSeconds => {
+      if (prevSeconds > 0) {
+        return prevSeconds - 1;
+      } else {
+        setIsActive(false);
+        onTimeUp(); // Trigger a callback when the countdown reaches 0
+        return 0;
+      }
+    });
   };
 
   useEffect(() => {
-    const interval = setInterval(countDown, 1000);
+    if (isActive && seconds > 0) {
+      const interval = setInterval(countDown, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+      return () => clearInterval(interval);
+    }
+  }, [isActive, seconds]);
 
   return (
     <div className="countdown-container">
-    <p>Time Remaining:</p>
+      <p>Time Remaining:</p>
       {seconds >= 0 ? (
         <div>
           <p>{seconds}</p>
@@ -25,6 +36,7 @@ const Countdown = () => {
           <p>Time's up!</p>
         </div>
       )}
+      
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import "./index.css";
 import blueTile from "./resources/blue.png";
 import greenTile from "./resources/green.png";
@@ -20,11 +20,18 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 const App = () => {
   const [grid, setGrid] = useState([]);
   const [score, setScore] = useState(0);
+  const [gameActive, setGameActive] = useState(true);
 
   // Function to restart the game
   const restartGame = () => {
     createGrid();
     setScore(0);
+    setGameActive(true); // Ensure game is active after restart
+  };
+
+  const handleGameOver = () => {
+    setGameActive(false); // Disable game interactions when the countdown reaches 0
+    console.log("Game over!");
   };
 
   const removeLinkedTiles = useCallback(
@@ -107,8 +114,11 @@ const App = () => {
   };
 
   const handleClick = (position) => {
-    removeLinkedTiles(position);
-    moveTilesDown();
+    if (gameActive) {
+      // Ensure game is active before handling clicks
+      removeLinkedTiles(position);
+      moveTilesDown();
+    }
   };
 
   useEffect(() => {
@@ -124,7 +134,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <Countdown />
+      <Countdown onTimeUp={handleGameOver} /> {/* Pass the handleGameOver callback */}
       <RestartButton onClick={restartGame} />
       <ScoreBoard score={score} />
       <Header />
