@@ -9,6 +9,7 @@ import Background from "./Background";
 import ScoreBoard from "./ScoreBoard";
 import RestartButton from "./RestartButton";
 import GameGrid from "./GameGrid";
+import Countdown from "./Countdown";
 
 // grid is a 1-dimensional array
 const width = 20;
@@ -123,6 +124,7 @@ const App = () => {
 
   return (
     <div className="app">
+      <Countdown />
       <RestartButton onClick={restartGame} />
       <ScoreBoard score={score} />
       <Header />
