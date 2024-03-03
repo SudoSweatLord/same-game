@@ -71,8 +71,11 @@ body {
   /* border-radius: 5px; */
 }
 
-/* .countdown-container {
-  font-size: 24px; 
-  color: white; 
+.countdown-container {
+  font-size: 24px;
+  color: white;
   margin-top: 20px;
-} */
+  left: 30px;
+  top: 30px;
+  position: absolute;
+}
