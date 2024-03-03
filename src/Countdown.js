@@ -3,19 +3,28 @@ import React, { useState, useEffect } from 'react';
 const Countdown = () => {
   const [seconds, setSeconds] = useState(60);
 
+  const countDown = () => {
+    setSeconds(prevSeconds => prevSeconds - 1);
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-    }, 1000);
+    const interval = setInterval(countDown, 1000);
 
     return () => clearInterval(interval);
-  }, [seconds]);
+  }, []);
 
   return (
-    <div style={{ position: 'absolute', top: 10, left: 10 }}>
-      Countdown: {seconds}
+    <div className="countdown-container">
+    <p>Time Remaining:</p>
+      {seconds >= 0 ? (
+        <div>
+          <p>{seconds}</p>
+        </div>
+      ) : (
+        <div>
+          <p>Time's up!</p>
+        </div>
+      )}
     </div>
   );
 };
