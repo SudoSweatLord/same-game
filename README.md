@@ -2,10 +2,9 @@
 
 'SameGame (さめがめ) is a tile-matching puzzle video game originally released under the name CHAIN SHOT in 1985 by Kuniaki "Morisuke" Moribe. It has since been ported to numerous computer platforms, handheld devices, and even TiVo, with new versions as of 2016.'
 -Wikipedia
+This is my clone of it.
 
 ## Description
-
-The App component uses React's useState, useEffect, and useCallback hooks to manage state and handle side effects. It also imports several images representing different colored tiles and two other components, Header and Background.
 
 The useState hook is used to initialize a state variable grid with an empty array. grid represents the game grid and each element in the array represents a tile in the grid. The setGrid function is used to update this state.
 
@@ -17,16 +16,20 @@ The moveTilesDown function moves the tiles down to fill the empty spaces left by
 
 The createGrid function creates a new grid with random colored tiles.
 
+The saveScore function saves the current score to local storage and updates the list of top scores.
+
 The handleClick function is called when a tile is clicked. It removes the clicked tile and any connected tiles of the same color, and then moves the remaining tiles down to fill the empty spaces.
 
 The useEffect hook is used to call the createGrid function when the component is first rendered, and to periodically call the moveTilesDown function every 200 milliseconds.
 
 In the returned JSX, the grid array is mapped to a list of img elements, each representing a tile in the grid. When a tile is clicked, the handleClick function is called with the position of the clicked tile.
 
+Finally the App component returns a JSX element that includes the RestartButton, ScoreBoard, Header, Background, and GameGrid components. The GameGrid component receives several props, including the current grid, the grid dimensions, the tile colors, and the functions to handle a tile click and save the score.
+
 ## This project wouldn't have been possible without
 
 - Kuniaki Moribe who invented the game in 1985
-- Ania K. for the starting template and tutorial
+- Ania K. for the starting template and tutorial that gave me a rough understanding 
 - gaborbata for code snippets and ideas
 - greweb for code snippets and ideas
 - University of Texas at Austin for code snippets and ideas
