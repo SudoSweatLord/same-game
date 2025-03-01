@@ -141,6 +141,37 @@ const App = () => {
 
     setTopScores(updatedTopScores);
   };
+  const hasValidMoves = (grid) => {
+    const visited = new Array(grid.length).fill(false);
+    for (let i = 0; i < grid.length; i++) {
+      if (grid[i] === "" || visited[i]) continue;
+      const color = grid[i];
+      let count = 0;
+      const queue = [i];
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (visited[current]) continue;
+        visited[current] = true;
+        if (grid[current] === color) {
+          count++;
+          if (count >= 3) return true;
+          const row = Math.floor(current / width);
+          const col = current % width;
+          if (row > 0) queue.push(current - width);
+          if (row < height - 1) queue.push(current + width);
+          if (col > 0) queue.push(current - 1);
+          if (col < width - 1) queue.push(current + 1);
+        }
+      }
+    }
+    return false;
+  };
+  
+  useEffect(() => {
+    if (grid.length > 0 && !hasValidMoves(grid)) {
+      restartGame();
+    }
+  }, [grid]);
 
   return (
     <div className="app">
