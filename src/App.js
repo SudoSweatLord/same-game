@@ -18,10 +18,8 @@ const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
-  const [score, setScore] = useState(() => {
-    const savedScore = localStorage.getItem("score");
-    return savedScore ? parseInt(savedScore, 10) : 0;
-  });
+  const [score, setScore] = useState(0);
+
   const [topScores, setTopScores] = useState(() => {
     const savedTopScores = JSON.parse(localStorage.getItem("topScores")) || [];
     return savedTopScores;
