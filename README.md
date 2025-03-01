@@ -54,7 +54,7 @@ npm install
 npm start
 ````
 
-## 🎮 How to Play
+## How to Play
 
 1. **Tile Matching**  
    Click on adjacent tiles to match 3 or more of the same color  
