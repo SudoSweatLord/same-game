@@ -4,8 +4,6 @@ import blueTile from "./resources/blue.png";
 import greenTile from "./resources/green.png";
 import orangeTile from "./resources/orange.png";
 import purpleTile from "./resources/purple.png";
-import Header from "./Header";
-import Background from "./Background";
 import ScoreBoard from "./ScoreBoard";
 import RestartButton from "./RestartButton";
 import GameGrid from "./GameGrid";
@@ -24,6 +22,18 @@ const App = () => {
     return savedTopScores;
   });
 
+  const createGrid = useCallback(() => {
+    const newGrid = [];
+    for (let i = 0; i < width * height; i++) {
+      const randomTile = {
+        id: Date.now() + i,
+        color: tileColors[Math.floor(Math.random() * tileColors.length)]
+      };
+      newGrid.push(randomTile);
+    }
+    setGrid(newGrid);
+  }, []);
+
   const restartGame = () => {
     saveScore(score);
     createGrid();
@@ -35,81 +45,73 @@ const App = () => {
     restartGame();
   };
 
-  const removeLinkedTiles = useCallback(
-    (position) => {
-      const color = grid[position];
-      if (!color) return;
+  const removeLinkedTiles = useCallback((position) => {
+    setGrid((prevGrid) => {
+      const newGrid = [...prevGrid];
+      const color = newGrid[position]?.color;
+      if (!color) return newGrid;
+
       const visited = new Array(width * height).fill(false);
       const stack = [position];
       const sameColorTiles = [];
+
       while (stack.length > 0) {
         const current = stack.pop();
         if (visited[current]) continue;
         visited[current] = true;
-        if (grid[current] === color) {
+        
+        if (newGrid[current]?.color === color) {
           sameColorTiles.push(current);
           const row = Math.floor(current / width);
           const col = current % width;
+
           if (row > 0) stack.push(current - width);
           if (row < height - 1) stack.push(current + width);
           if (col > 0) stack.push(current - 1);
           if (col < width - 1) stack.push(current + 1);
         }
       }
+
       if (sameColorTiles.length >= 3) {
-        setScore(
-          (prev) => prev + sameColorTiles.length * sameColorTiles.length
-        );
-        setGrid((prevGrid) => {
-          const newGrid = [...prevGrid];
-          sameColorTiles.forEach((idx) => {
-            newGrid[idx] = "";
-          });
-          return newGrid;
+        setScore(prev => prev + sameColorTiles.length * sameColorTiles.length);
+        sameColorTiles.forEach(idx => {
+          newGrid[idx] = null;
         });
       }
-    },
-    [grid]
-  );
+      
+      return newGrid;
+    });
+  }, []);
 
   const moveTilesDown = useCallback(() => {
     setGrid((prevGrid) => {
       const newGrid = [...prevGrid];
       for (let col = 0; col < width; col++) {
         const column = [];
-        for (let row = 0; row < height; row++) {
+        for (let row = height - 1; row >= 0; row--) {
           const idx = col + row * width;
-          if (newGrid[idx] !== "") {
+          if (newGrid[idx] !== null) {
             column.push(newGrid[idx]);
           }
         }
         while (column.length < height) {
-          column.unshift("");
+          column.push(null);
         }
         for (let row = 0; row < height; row++) {
-          newGrid[col + row * width] = column[row];
+          const idx = col + (height - 1 - row) * width;
+          newGrid[idx] = column[row];
         }
       }
       return newGrid;
     });
   }, []);
 
-  const createGrid = () => {
-    const newGrid = [];
-    for (let i = 0; i < width * height; i++) {
-      const randomTile =
-        tileColors[Math.floor(Math.random() * tileColors.length)];
-      newGrid.push(randomTile);
-    }
-    setGrid(newGrid);
-  };
-
   const handleClick = (position) => {
     if (gameOver || isProcessing) return;
     setIsProcessing(true);
     removeLinkedTiles(position);
-    moveTilesDown();
     setTimeout(() => {
+      moveTilesDown();
       setIsProcessing(false);
     }, 300);
   };
@@ -117,25 +119,25 @@ const App = () => {
   const hasValidMoves = (grid) => {
     const visited = new Array(grid.length).fill(false);
     for (let i = 0; i < grid.length; i++) {
-      if (grid[i] === "" || visited[i]) continue;
-      const color = grid[i];
+      if (grid[i] === null || visited[i]) continue;
+      const color = grid[i]?.color;
       let count = 0;
       const stack = [i];
       while (stack.length > 0) {
         const current = stack.pop();
         if (visited[current]) continue;
         visited[current] = true;
-        if (grid[current] !== color) continue;
+        if (grid[current]?.color !== color) continue;
         count++;
         if (count >= 3) return true;
         const row = Math.floor(current / width);
         const col = current % width;
-        if (row > 0 && grid[current - width] === color)
+        if (row > 0 && grid[current - width]?.color === color)
           stack.push(current - width);
-        if (row < height - 1 && grid[current + width] === color)
+        if (row < height - 1 && grid[current + width]?.color === color)
           stack.push(current + width);
-        if (col > 0 && grid[current - 1] === color) stack.push(current - 1);
-        if (col < width - 1 && grid[current + 1] === color)
+        if (col > 0 && grid[current - 1]?.color === color) stack.push(current - 1);
+        if (col < width - 1 && grid[current + 1]?.color === color)
           stack.push(current + 1);
       }
     }
@@ -146,7 +148,7 @@ const App = () => {
     createGrid();
     const savedTopScores = JSON.parse(localStorage.getItem("topScores")) || [];
     setTopScores(savedTopScores);
-  }, []);
+  }, [createGrid]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -183,9 +185,7 @@ const App = () => {
           grid={grid}
           width={width}
           height={height}
-          tileColors={tileColors}
           onTileClick={handleClick}
-          onSaveScore={saveScore}
         />
       </div>
       <div className="sidebar">
@@ -202,7 +202,6 @@ const App = () => {
       )}
     </div>
   );
-  
 };
 
 export default App;

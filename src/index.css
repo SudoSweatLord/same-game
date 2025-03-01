@@ -42,22 +42,27 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: var(--container-width);
+  max-width: var(--max-width);
+  height: calc(var(--container-width) * 0.5); /* Maintain 2:1 aspect ratio */
+  max-height: calc(var(--max-width) * 0.5); /* Corresponding max height */
 }
 
 .game {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
-  width: var(--container-width);
-  max-width: var(--max-width);
-  aspect-ratio: 2 / 1;
+  grid-template-rows: repeat(10, 1fr);
+  width: 100%;
+  height: 100%;
   border: 23px solid var(--border-color);
   position: relative;
+  box-sizing: border-box;
 }
 
 .game img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 

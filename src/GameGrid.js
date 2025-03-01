@@ -1,22 +1,27 @@
 import React from "react";
 
-const GameGrid = ({ grid, width, height, tileColors, onTileClick }) => {
+const GameGrid = ({ grid, width, height, onTileClick }) => {
   return (
-    <div className="game">
-      {grid.map((tileColor, index) => {
-        const colorName = tileColor.split("/").pop().split(".")[0];
-        return tileColor ? (
-          <img
-            key={index}
-            src={tileColor}
-            alt={colorName}
-            data-id={index}
-            onClick={() => onTileClick(index)}
-          />
-        ) : (
-          <canvas key={index} id="empty" width="50" height="50"></canvas>
-        );
-      })}
+    <div 
+      className="game"
+      style={{
+        gridTemplateColumns: `repeat(${width}, 1fr)`,
+        gridTemplateRows: `repeat(${height}, 1fr)`
+      }}
+    >
+      {grid.map((tile, index) => (
+        <div
+          key={tile?.id || `empty-${index}`}
+          onClick={() => onTileClick(index)}
+          className="tile"
+          style={{
+            minWidth: '100%',
+            minHeight: '100%'
+          }}
+        >
+          {tile?.color && <img src={tile.color} alt="game tile" />}
+        </div>
+      ))}
     </div>
   );
 };
