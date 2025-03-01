@@ -45,20 +45,20 @@ body {
 }
 
 .game {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
   width: var(--container-width);
   max-width: var(--max-width);
-  height: auto;
   aspect-ratio: 2 / 1;
   border: 23px solid var(--border-color);
   position: relative;
 }
 
 .game img {
-  width: calc(100% / 20);
+  width: 100%;
   height: auto;
-  flex: 1;
+  object-fit: contain;
+  display: block;
 }
 
 .sidebar {
