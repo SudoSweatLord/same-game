@@ -6,7 +6,7 @@
   --button-hover-color: #28821a;
   --container-width: 70vw;
   --max-width: 1000px;
-  --sidebar-width: 200px;
+  --sidebar-width: 15vw;
   --padding: 20px;
   --gap: 20px;
   --border-radius: 8px;
@@ -78,7 +78,7 @@ body {
   padding: 10px 20px;
   text-align: center;
   font-size: 24px;
-  width: 100%;
+  width: 80%;
   border-radius: var(--border-radius);
 }
 
