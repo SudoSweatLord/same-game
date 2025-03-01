@@ -10,16 +10,15 @@ import ScoreBoard from "./ScoreBoard";
 import RestartButton from "./RestartButton";
 import GameGrid from "./GameGrid";
 
-// grid is a 1-dimensional array
 const width = 20;
 const height = 10;
-
 const tileColors = [greenTile, blueTile, purpleTile, orangeTile];
 
 const App = () => {
   const [grid, setGrid] = useState([]);
   const [score, setScore] = useState(0);
-
+  const [gameOver, setGameOver] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [topScores, setTopScores] = useState(() => {
     const savedTopScores = JSON.parse(localStorage.getItem("topScores")) || [];
     return savedTopScores;
@@ -29,90 +28,118 @@ const App = () => {
     saveScore(score);
     createGrid();
     setScore(0);
+    setGameOver(false);
+  };
+
+  const handleContinue = () => {
+    restartGame();
   };
 
   const removeLinkedTiles = useCallback(
     (position) => {
-      console.log("position ===", position);
-      const sameColorTiles = [];
       const color = grid[position];
+      if (!color) return;
       const visited = new Array(width * height).fill(false);
-      const queue = [position];
-      while (queue.length > 0) {
-        const current = queue.shift();
-        if (visited[current]) {
-          continue;
-        }
+      const stack = [position];
+      const sameColorTiles = [];
+      while (stack.length > 0) {
+        const current = stack.pop();
+        if (visited[current]) continue;
         visited[current] = true;
         if (grid[current] === color) {
           sameColorTiles.push(current);
-          const currentRow = Math.floor(current / width);
-          const currentColumn = current % width;
-          if (currentRow > 0) {
-            queue.push(current - width);
-          }
-          if (currentRow < height - 1) {
-            queue.push(current + width);
-          }
-          if (currentColumn > 0) {
-            queue.push(current - 1);
-          }
-          if (currentColumn < width - 1) {
-            queue.push(current + 1);
-          }
+          const row = Math.floor(current / width);
+          const col = current % width;
+          if (row > 0) stack.push(current - width);
+          if (row < height - 1) stack.push(current + width);
+          if (col > 0) stack.push(current - 1);
+          if (col < width - 1) stack.push(current + 1);
         }
       }
-      console.log("sameColorTiles ===", sameColorTiles);
       if (sameColorTiles.length >= 3) {
-        const n = sameColorTiles.length;
-        setScore((prevScore) => prevScore + n * n);
-        sameColorTiles.forEach((position) => {
-          grid[position] = "";
+        setScore(
+          (prev) => prev + sameColorTiles.length * sameColorTiles.length
+        );
+        setGrid((prevGrid) => {
+          const newGrid = [...prevGrid];
+          sameColorTiles.forEach((idx) => {
+            newGrid[idx] = "";
+          });
+          return newGrid;
         });
       }
-      let newGrid = [...grid];
-      if (sameColorTiles.length >= 3) {
-        sameColorTiles.forEach((position) => {
-          newGrid[position] = "";
-        });
-      }
-      setGrid(newGrid);
     },
     [grid]
   );
 
   const moveTilesDown = useCallback(() => {
-    let newGrid = [...grid];
-    for (let i = 0; i < width; i++) {
-      let column = [];
-      for (let j = 0; j < height; j++) {
-        if (newGrid[i + j * width] !== "") {
-          column.push(newGrid[i + j * width]);
+    setGrid((prevGrid) => {
+      const newGrid = [...prevGrid];
+      for (let col = 0; col < width; col++) {
+        const column = [];
+        for (let row = 0; row < height; row++) {
+          const idx = col + row * width;
+          if (newGrid[idx] !== "") {
+            column.push(newGrid[idx]);
+          }
+        }
+        while (column.length < height) {
+          column.unshift("");
+        }
+        for (let row = 0; row < height; row++) {
+          newGrid[col + row * width] = column[row];
         }
       }
-      while (column.length < height) {
-        column.unshift("");
-      }
-      for (let j = 0; j < height; j++) {
-        newGrid[i + j * width] = column[j];
-      }
-    }
-    setGrid(newGrid);
-  }, [grid, setGrid]);
+      return newGrid;
+    });
+  }, []);
 
   const createGrid = () => {
-    const grid = [];
+    const newGrid = [];
     for (let i = 0; i < width * height; i++) {
       const randomTile =
         tileColors[Math.floor(Math.random() * tileColors.length)];
-      grid.push(randomTile);
+      newGrid.push(randomTile);
     }
-    setGrid(grid);
+    setGrid(newGrid);
   };
 
   const handleClick = (position) => {
+    if (gameOver || isProcessing) return;
+    setIsProcessing(true);
     removeLinkedTiles(position);
     moveTilesDown();
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 300);
+  };
+
+  const hasValidMoves = (grid) => {
+    const visited = new Array(grid.length).fill(false);
+    for (let i = 0; i < grid.length; i++) {
+      if (grid[i] === "" || visited[i]) continue;
+      const color = grid[i];
+      let count = 0;
+      const stack = [i];
+      while (stack.length > 0) {
+        const current = stack.pop();
+        if (visited[current]) continue;
+        visited[current] = true;
+        if (grid[current] !== color) continue;
+        count++;
+        if (count >= 3) return true;
+        const row = Math.floor(current / width);
+        const col = current % width;
+        if (row > 0 && grid[current - width] === color)
+          stack.push(current - width);
+        if (row < height - 1 && grid[current + width] === color)
+          stack.push(current + width);
+        if (col > 0 && grid[current - 1] === color) stack.push(current - 1);
+        if (col < width - 1 && grid[current + 1] === color)
+          stack.push(current + 1);
+      }
+    }
+    return false;
   };
 
   useEffect(() => {
@@ -123,59 +150,35 @@ const App = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      moveTilesDown();
+      if (!gameOver && !isProcessing) {
+        moveTilesDown();
+      }
     }, 200);
     return () => clearInterval(interval);
-  }, [moveTilesDown]);
+  }, [moveTilesDown, gameOver, isProcessing]);
+
+  useEffect(() => {
+    if (!isProcessing && grid.length > 0 && !hasValidMoves(grid) && !gameOver) {
+      setTimeout(() => {
+        if (!hasValidMoves(grid)) {
+          setGameOver(true);
+        }
+      }, 300);
+    }
+  }, [grid, isProcessing, gameOver]);
 
   const saveScore = (newScore) => {
-    console.log("Saving score:", newScore);
     localStorage.setItem("score", newScore.toString());
-
     const updatedTopScores = [...topScores, newScore]
       .sort((a, b) => b - a)
       .slice(0, 5);
-
-    console.log("Updated top scores:", updatedTopScores);
     localStorage.setItem("topScores", JSON.stringify(updatedTopScores));
-
     setTopScores(updatedTopScores);
   };
-  const hasValidMoves = (grid) => {
-    const visited = new Array(grid.length).fill(false);
-    for (let i = 0; i < grid.length; i++) {
-      if (grid[i] === "" || visited[i]) continue;
-      const color = grid[i];
-      let count = 0;
-      const queue = [i];
-      while (queue.length > 0) {
-        const current = queue.shift();
-        if (visited[current]) continue;
-        visited[current] = true;
-        if (grid[current] === color) {
-          count++;
-          if (count >= 3) return true;
-          const row = Math.floor(current / width);
-          const col = current % width;
-          if (row > 0) queue.push(current - width);
-          if (row < height - 1) queue.push(current + width);
-          if (col > 0) queue.push(current - 1);
-          if (col < width - 1) queue.push(current + 1);
-        }
-      }
-    }
-    return false;
-  };
-  
-  useEffect(() => {
-    if (grid.length > 0 && !hasValidMoves(grid)) {
-      restartGame();
-    }
-  }, [grid]);
 
   return (
     <div className="app">
-      <RestartButton onClick={restartGame} />
+      <RestartButton onClick={restartGame} disabled={gameOver} />
       <ScoreBoard score={score} topScores={topScores} />
       <Header />
       <Background />
@@ -187,6 +190,14 @@ const App = () => {
         onTileClick={handleClick}
         onSaveScore={saveScore}
       />
+      {gameOver && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>YOUR SCORE IS: {score}</p>
+            <button onClick={handleContinue}>Click to restart</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
