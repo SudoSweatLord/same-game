@@ -1,11 +1,25 @@
+:root {
+  --primary-font: "TechnoRaceItalic";
+  --background-color: darkgrey;
+  --border-color: #3b3a3a;
+  --text-color: orange;
+  --button-hover-color: #28821a;
+  --container-width: 70vw;
+  --max-width: 1000px;
+  --sidebar-width: 200px;
+  --padding: 20px;
+  --gap: 20px;
+  --border-radius: 8px;
+}
+
 @font-face {
-  font-family: "TechnoRaceItalic";
+  font-family: var(--primary-font);
   src: local("TechnoRaceItalic"),
     url("./TechnoRaceItalic.otf") format("opentype");
 }
 
 body {
-  background-color: darkgrey;
+  background-color: var(--background-color);
   margin: 0;
   padding: 0;
   display: flex;
@@ -19,12 +33,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  gap: 20px; /* Creates space between the game and the sidebar */
+  padding: var(--padding);
+  gap: var(--gap);
 }
 
 .game-container {
-  flex-grow: 1; /* Makes the game take up most of the space */
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,16 +47,16 @@ body {
 .game {
   display: flex;
   flex-wrap: wrap;
-  width: 70vw; /* Takes up most of the screen width */
-  max-width: 1000px;
+  width: var(--container-width);
+  max-width: var(--max-width);
   height: auto;
-  aspect-ratio: 2 / 1; /* Keeps proportions */
-  border: 23px solid #3b3a3a;
+  aspect-ratio: 2 / 1;
+  border: 23px solid var(--border-color);
   position: relative;
 }
 
 .game img {
-  width: calc(100% / 20); /* Dynamically adjusts tile size */
+  width: calc(100% / 20);
   height: auto;
   flex: 1;
 }
@@ -52,20 +66,20 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px; /* Space between the score and restart button */
-  width: 200px; /* Ensures a consistent width */
+  gap: 15px;
+  width: var(--sidebar-width);
 }
 
 .score-container {
-  font-family: TechnoRaceItalic;
-  background-color: #3b3a3a;
+  font-family: var(--primary-font);
+  background-color: var(--border-color);
   border: none;
-  color: orange;
+  color: var(--text-color);
   padding: 10px 20px;
   text-align: center;
   font-size: 24px;
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
 }
 
 .score-container ul {
@@ -75,21 +89,21 @@ body {
 }
 
 .restart-button {
-  font-family: TechnoRaceItalic;
-  background-color: #3b3a3a;
+  font-family: var(--primary-font);
+  background-color: var(--border-color);
   border: none;
-  color: orange;
+  color: var(--text-color);
   padding: 15px 32px;
   text-align: center;
   font-size: 18px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
 }
 
 .restart-button:hover {
-  background-color: #28821a;
+  background-color: var(--button-hover-color);
 }
 
 .modal-overlay {
@@ -106,10 +120,10 @@ body {
 }
 
 .modal {
-  color: orange;
-  font-family: "TechnoRaceItalic";
-  background: #3b3a3a;
-  padding: 20px;
+  color: var(--text-color);
+  font-family: var(--primary-font);
+  background: var(--border-color);
+  padding: var(--padding);
   border-radius: 5px;
   text-align: center;
 }
