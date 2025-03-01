@@ -17,74 +17,79 @@ body {
 
 .app {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 13px;
-  padding-top: 60px;
-  position: relative;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px; /* Creates space between the game and the sidebar */
+}
+
+.game-container {
+  flex-grow: 1; /* Makes the game take up most of the space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game {
   display: flex;
   flex-wrap: wrap;
-  max-width: 90vw;
-  max-height: 90vh;
-  aspect-ratio: 2 / 1;
+  width: 70vw; /* Takes up most of the screen width */
+  max-width: 1000px;
+  height: auto;
+  aspect-ratio: 2 / 1; /* Keeps proportions */
   border: 23px solid #3b3a3a;
   position: relative;
 }
 
 .game img {
-  width: calc(100% / 20);
+  width: calc(100% / 20); /* Dynamically adjusts tile size */
   height: auto;
   flex: 1;
 }
 
-.restart-button {
-  font-family: TechnoRaceItalic;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #3b3a3a;
-  border: none;
-  color: orange;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-}
-
-.restart-button:hover {
-  background-color: #28821a;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* Space between the score and restart button */
+  width: 200px; /* Ensures a consistent width */
 }
 
 .score-container {
   font-family: TechnoRaceItalic;
-  position: absolute;
-  top: 57px;
-  right: 20px;
   background-color: #3b3a3a;
   border: none;
   color: orange;
-  padding: 5px 32px;
+  padding: 10px 20px;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 29px;
-  margin: 4px 2px;
-  min-width: 100px;
-  max-width: 200px;
-  width: auto;
+  font-size: 24px;
+  width: 100%;
+  border-radius: 8px;
 }
 
 .score-container ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.restart-button {
+  font-family: TechnoRaceItalic;
+  background-color: #3b3a3a;
+  border: none;
+  color: orange;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.restart-button:hover {
+  background-color: #28821a;
 }
 
 .modal-overlay {

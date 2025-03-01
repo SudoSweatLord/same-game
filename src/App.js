@@ -178,18 +178,20 @@ const App = () => {
 
   return (
     <div className="app">
-      <RestartButton onClick={restartGame} disabled={gameOver} />
-      <ScoreBoard score={score} topScores={topScores} />
-      <Header />
-      <Background />
-      <GameGrid
-        grid={grid}
-        width={width}
-        height={height}
-        tileColors={tileColors}
-        onTileClick={handleClick}
-        onSaveScore={saveScore}
-      />
+      <div className="game-container">
+        <GameGrid
+          grid={grid}
+          width={width}
+          height={height}
+          tileColors={tileColors}
+          onTileClick={handleClick}
+          onSaveScore={saveScore}
+        />
+      </div>
+      <div className="sidebar">
+        <ScoreBoard score={score} topScores={topScores} />
+        <RestartButton onClick={restartGame} disabled={gameOver} />
+      </div>
       {gameOver && (
         <div className="modal-overlay">
           <div className="modal">
@@ -200,6 +202,7 @@ const App = () => {
       )}
     </div>
   );
+  
 };
 
 export default App;
