@@ -72,7 +72,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 15px;
+  min-width: 80px;
   width: var(--sidebar-width);
+  max-width: 20vw;
+  overflow: hidden;
 }
 
 .score-container {
@@ -82,7 +85,7 @@ body {
   color: var(--text-color);
   padding: 10px 20px;
   text-align: center;
-  font-size: 24px;
+  font-size: 1.1rem;
   width: 80%;
   border-radius: var(--border-radius);
 }
@@ -100,11 +103,14 @@ body {
   color: var(--text-color);
   padding: 15px 32px;
   text-align: center;
-  font-size: 18px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
-  width: 100%;
+  width: 80%;
   border-radius: var(--border-radius);
+  display: flex;
+  align-items: center; 
+  justify-content: center;
 }
 
 .restart-button:hover {
@@ -152,4 +158,8 @@ body {
 
 p {
   font-size: 2.2em;
+}
+
+h4 {
+  margin: 0.5rem;
 }
